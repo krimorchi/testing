@@ -62,47 +62,46 @@
             //пока не стал делать для экономии времени
             
             if(mainCol == 0){
-              alert(2)
               if(d==0){
-                nextCol = nextCols[e]
+                nextCol = nextCols[e].textContent
                 if(e==0){
-                  rightCol = mainCols[++e]
+                  rightCol = mainCols[++e].textContent
                   sumCols = nextCol + rightCol
                 }else if(0 < e < 25){ //?подставить $a*$b
-                  leftCol = mainCols[--e]
-                  rightCol = mainCols[++e]
+                  leftCol = mainCols[--e].textContent
+                  rightCol = mainCols[++e].textContent
                   sumCols = nextCol + rightCol + leftCol
                 }else{
-                  leftCol = mainCols[--e]
+                  leftCol = mainCols[--e].textContent
                   sumCols = nextCol + leftCol
                 }
                 if(sumCols >= 2) sum++
               }else if( 0 < d < 5){ //?подставить $a
-                prevCol = prevCols[e]
-                nextCol = nextCols[e]
+                prevCol = prevCols[e].textContent
+                nextCol = nextCols[e].textContent
                 if(e==0){
-                  rightCol = mainCols[++e]
+                  rightCol = mainCols[++e].textContent
                   sumCols = nextCol + prevCol + rightCol
                 }else if(0 < e < 25){ //?подставить $a*$b
-                  leftCol = mainCols[--e]
-                  rightCol = mainCols[++e]
+                  leftCol = mainCols[--e].textContent
+                  rightCol = mainCols[++e].textContent
                   sumCols = nextCol + prevCol + rightCol + leftCol
                 }else{
-                  leftCol = mainCols[--e]
+                  leftCol = mainCols[--e].textContent
                   sumCols = nextCol + prevCol + leftCol
                 }
                 if(sumCols >= 2) sum++
               }else{
-                prevCol = prevCols[e]
+                prevCol = prevCols[e].textContent
                 if(e==0){
-                  rightCol = mainCols[++e]
+                  rightCol = mainCols[++e].textContent
                   sumCols = prevCol + rightCol
                 }else if(0 < e < 25){ //?подставить $a*$b
-                  leftCol = mainCols[--e]
-                  rightCol = mainCols[++e]
+                  leftCol = mainCols[--e].textContent
+                  rightCol = mainCols[++e].textContent
                   sumCols = prevCol + rightCol + leftCol
                 }else{
-                  leftCol = mainCols[--e]
+                  leftCol = mainCols[--e].textContent
                   sumCols = prevCol + leftCol
                 }
                 if(sumCols >= 2) sum++
