@@ -22,104 +22,59 @@
     </table>
 
     <script>
-      var t = document.querySelector('#table') //берем таблицу 
-      var rows = document.querySelectorAll('tr')//получаю все строки
-      var tra = t.children //получаем каждую строку по отдельности в массиве
-      var tds = null
-      var sum = 0
-      var td = t.querySelectorAll(".td")
-      var sidesSum = 0
-      var nextCols = 0
-      var prevCols = 0
-      var prevCol = 0
-      var nextCol = 0
-      var rightCol = 0
-      var leftCol = 0
+      let t = document.querySelector('#table') //берем таблицу 
+      let rows = document.querySelectorAll('tr')//получаю все строки
+      let sum = 0
+      let td = t.querySelectorAll(".td")
+      let sidesSum = 0
 
       //Здесь пока что не все получилось, т.к. previousElementSibling и тд возвращает объект, хотя теоретически должен вернуть значение ячейки 
       function sumAll(){
         // Вызов функции смены цвета
         self.changeColor()
-        for (var d = 0; d < rows.length; d++) { // перебираем все строки
-          var mainCols = rows[d].querySelectorAll('td')// получаем текущие столбцы
-          
-          //Проводим проверку на случай, если это первая или последняя строка
-          if(d==0){
-            nextCols = rows[++d].querySelectorAll('td')// получаем следующие столбцы
-          }else if( 0 < d < 5){ //$a
-            prevCols = rows[--d].querySelectorAll('td')// получаем предыдущие столбцы
-            nextCols = rows[++d].querySelectorAll('td')// получаем следующие столбцы
-          }else{
-            prevCols = rows[--d].querySelectorAll('td')// получаем предыдущие столбцы
-          }
-          
-          for (var e = 0; e < mainCols.length; e++) { // перебираем все столбцы
-            
-            let mainCol = mainCols[e] //берем текущую ячейку
-            //Проводим проверку на случай, если первая\последняя стркоа и затем проверку, если первый или последний столбец и суммируем итог
-            //Затем проверяем больше ли 2 сумма единиц в соседних ячейках
-            //Повтороение if-ов выглядит очень некрасиво, по хорошему надо вынести в отдельную функцию и вызывать ее по мере необходимости, 
-            //пока не стал делать для экономии времени
-            
-            if(mainCol == 0){
-              if(d==0){
-                nextCol = nextCols[e].textContent
-                if(e==0){
-                  rightCol = mainCols[++e].textContent
-                  sumCols = nextCol + rightCol
-                }else if(0 < e < 25){ //?подставить $a*$b
-                  leftCol = mainCols[--e].textContent
-                  rightCol = mainCols[++e].textContent
-                  sumCols = nextCol + rightCol + leftCol
-                }else{
-                  leftCol = mainCols[--e].textContent
-                  sumCols = nextCol + leftCol
-                }
-                if(sumCols >= 2) sum++
-              }else if( 0 < d < 5){ //?подставить $a
-                prevCol = prevCols[e].textContent
-                nextCol = nextCols[e].textContent
-                if(e==0){
-                  rightCol = mainCols[++e].textContent
-                  sumCols = nextCol + prevCol + rightCol
-                }else if(0 < e < 25){ //?подставить $a*$b
-                  leftCol = mainCols[--e].textContent
-                  rightCol = mainCols[++e].textContent
-                  sumCols = nextCol + prevCol + rightCol + leftCol
-                }else{
-                  leftCol = mainCols[--e].textContent
-                  sumCols = nextCol + prevCol + leftCol
-                }
-                if(sumCols >= 2) sum++
-              }else{
-                prevCol = prevCols[e].textContent
-                if(e==0){
-                  rightCol = mainCols[++e].textContent
-                  sumCols = prevCol + rightCol
-                }else if(0 < e < 25){ //?подставить $a*$b
-                  leftCol = mainCols[--e].textContent
-                  rightCol = mainCols[++e].textContent
-                  sumCols = prevCol + rightCol + leftCol
-                }else{
-                  leftCol = mainCols[--e].textContent
-                  sumCols = prevCol + leftCol
-                }
-                if(sumCols >= 2) sum++
-              }
+        let rowInd = 0
+        let colInd = 0
+        forFirst = 0
+        forSecond = 0
+        //прохожусь по каждой ячейке 
+        for(let i; i < rows.length; i++){
+          for(let f = 0; f < 5; f++){
+            //проверяю содержимое на соответствие условию
+            line = rows[i]
+            cell = line[f]
+            if(cell == 0){
+              //Этап нахождения значения ячейки разбит на 2 переменные, т.к. иначе у меня выдавал ошибку undefined
+
+              //Получаю значение строки(той же, выше\ниже)
+              let upCell = rows[--i]?.textContent
+              //Собираю полученное ранее значение в массив, чтобы обратиться к нему через []
+              let upperRow = upCell?.split(' ')[f]
+              
+              let downCell = rows[++i]?.textContent
+              let downRow = downCell?.split(' ')[f]
+
+              let rightCell = rows[i]?.textContent
+              let rightCol = rightCell?.split(' ')[++f]
+
+              let leftCell = rows[i]?.textContent
+              let leftCol = leftCell?.split(' ')[--f]
+
+              //Суммирую результат полученных значений
+              sidesSum = downRow + upperRow + rightCol + leftCol
+
+              //Проверяю результат на соответствие условию
+              if(sidesSum > 2){ ++sum}
             }
           }
         }
-        
         //Вывожу результат
         alert('Количество ячеек с нулями имеют больше 2 ячеек с 1: ' + sum)
       }
-
       function changeColor(){
         for(let a of td){
           a.style.background = "yellow"
         }
       }
-
     </script>
  </body>
 </html>
