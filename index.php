@@ -32,38 +32,48 @@
       function sumAll(){
         // Вызов функции смены цвета
         self.changeColor()
-        let rowInd = 0
-        let colInd = 0
+        let upC = null
+        let dnC = null
         forFirst = 0
         forSecond = 0
+
+        //Получаю таблицу в массиве
+        let data = Array.prototype.map.call(document.querySelectorAll('#table tr'), function(tr) {
+            return Array.prototype.map.call(tr.querySelectorAll('td'), function(td) {
+                return td.innerHTML;
+            })
+        })
+        console.log(data)
         //прохожусь по каждой ячейке 
-        for(let i; i < rows.length; i++){
+        for(let i = 0; i < 5; i++){
           for(let f = 0; f < 5; f++){
-            //проверяю содержимое на соответствие условию
-            line = rows[i]
-            cell = line[f]
-            if(cell == 0){
-              //Этап нахождения значения ячейки разбит на 2 переменные, т.к. иначе у меня выдавал ошибку undefined
+            if(data[i][f] == 0){
+          // Получаю значение строки(той же, выше\ниже)
 
-              //Получаю значение строки(той же, выше\ниже)
-              let upCell = rows[--i]?.textContent
-              //Собираю полученное ранее значение в массив, чтобы обратиться к нему через []
-              let upperRow = upCell?.split(' ')[f]
-              
-              let downCell = rows[++i]?.textContent
-              let downRow = downCell?.split(' ')[f]
+          //Задаю значение внутри для сброса предыдущего значения
+              let upCell = null
+              let dnCell = null
+              let lCell = null
+              let rCell = null
 
-              let rightCell = rows[i]?.textContent
-              let rightCol = rightCell?.split(' ')[++f]
+              //Задаю "координаты" для верхнего\нижнего и правого\левого положения, не через инкремент\декремент, 
+              //т.к. JS осуществляет его для i и f(а это не нужно)
+              upR = i - 1
+              dnR = i + 1
+              rC = f + 1
+              lC = f - 1
 
-              let leftCell = rows[i]?.textContent
-              let leftCol = leftCell?.split(' ')[--f]
+              //Проверяю на undefined при помощи оператора необязательной цепочки вызовов, чтобы не выдавал ошибку, если же значения нет, то null, 
+              //чтобы sidesSum корректно работал и не выдавал NaN
+              dnCell = data[dnR]?.[f] ?? null
+              upCell = data[upR]?.[f] ?? null
+              lCell = data[i]?.[lC] ?? null
+              rCell = data[i]?.[rC] ?? null
+              //Суммирую результат полученных значений  с преобразованием в число
+              sidesSum = Number(upCell) +Number(dnCell) +Number(lCell) +Number(rCell)
 
-              //Суммирую результат полученных значений
-              sidesSum = downRow + upperRow + rightCol + leftCol
-
-              //Проверяю результат на соответствие условию
-              if(sidesSum > 2){ ++sum}
+              // //Проверяю результат на соответствие условию
+              if(sidesSum >= 2){ ++sum}
             }
           }
         }
