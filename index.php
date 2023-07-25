@@ -40,106 +40,69 @@
       function sumAll(){
         // Вызов функции смены цвета
         self.changeColor()
-        //прохожусь по таблице
-        // for (var a=0; a<t.length; a++)  {
-        //   //получаю все элементы текущей строки в массиве
-        //     tds = t[a].children;
-        //     //прохожусь по каждому элементу
-        //     // for (var b=0; b<tds.length;b++)  {
-
-        //     //     //Далее возникла загвоздка, т.к. у меня не получается обратиться  к элементам таблицы. 
-        //     //     //Вроде как(судя по док-ии и форумам) это делает (next\previous)Sibling, однако они это делают справа\слева, но не сверху\снизу
-        //     //     //Теоретически можно было бы раздать всем тэгам td id-шники, но это нецелесообразный подход и я уверен, есть решение лучше
-                
-        //     //     //Прохожу по каждой ячейке строки tds
-        //     //     for(let elem of tds){
-        //     //       var upper = elem.previousSibling;
-        //     //       var down = elem.nextSibling;
-  
-        //     //       //суммирую результат,т.к. если он больше 2, то есть подходящая условию ячейка
-        //     //       sidesSum = upper + down
-
-        //     //       //проверяю выполнение условия
-        //     //       if(sidesSum>2) sum++;
-        //         //   }
-        //         // }
-            
-        //     }
         for (var d = 0; d < rows.length; d++) { // перебираем все строки
-          let mainCols = rows[d].querySelectorAll('td')// получаем текущие столбцы
-
+          var mainCols = rows[d].querySelectorAll('td')// получаем текущие столбцы
+          
           //Проводим проверку на случай, если это первая или последняя строка
           if(d==0){
-            d = d + 1
-            nextCols = rows[d].querySelectorAll('td')// получаем следующие столбцы
+            nextCols = rows[++d].querySelectorAll('td')// получаем следующие столбцы
           }else if( 0 < d < 5){ //$a
-            d = d - 1
-            prevCols = rows[d].querySelectorAll('td')// получаем предыдущие столбцы
-            d = d+2
-            nextCols = rows[d].querySelectorAll('td')// получаем следующие столбцы
+            prevCols = rows[--d].querySelectorAll('td')// получаем предыдущие столбцы
+            nextCols = rows[++d].querySelectorAll('td')// получаем следующие столбцы
           }else{
-            d = d - 1
-            prevCols = rows[d].querySelectorAll('td')// получаем предыдущие столбцы
+            prevCols = rows[--d].querySelectorAll('td')// получаем предыдущие столбцы
           }
           
           for (var e = 0; e < mainCols.length; e++) { // перебираем все столбцы
             
-            let mainCol = mainCols[e].textContent //берем текущую ячейку
+            let mainCol = mainCols[e] //берем текущую ячейку
             //Проводим проверку на случай, если первая\последняя стркоа и затем проверку, если первый или последний столбец и суммируем итог
             //Затем проверяем больше ли 2 сумма единиц в соседних ячейках
+            //Повтороение if-ов выглядит очень некрасиво, по хорошему надо вынести в отдельную функцию и вызывать ее по мере необходимости, 
+            //пока не стал делать для экономии времени
+            
             if(mainCol == 0){
+              alert(2)
               if(d==0){
-                nextCol = nextCols[e].textContent
+                nextCol = nextCols[e]
                 if(e==0){
-                  let g = ++e
-                  rightCol = mainCols[g].textContent
+                  rightCol = mainCols[++e]
                   sumCols = nextCol + rightCol
-                }else if(0 < e < 25){ // $a*$b
-                  let f = --e
-                  let g = ++e
-                  leftCol = mainCols[f].textContent
-                  rightCol = mainCols[g].textContent
+                }else if(0 < e < 25){ //?подставить $a*$b
+                  leftCol = mainCols[--e]
+                  rightCol = mainCols[++e]
                   sumCols = nextCol + rightCol + leftCol
                 }else{
-                  let f = --e
-                  leftCol = mainCols[f].textContent
+                  leftCol = mainCols[--e]
                   sumCols = nextCol + leftCol
                 }
                 if(sumCols >= 2) sum++
-              }else if( 0 < d < 5){ // $a
-                prevCol = prevCols[e].textContent
-                nextCol = nextCols[e].textContent
+              }else if( 0 < d < 5){ //?подставить $a
+                prevCol = prevCols[e]
+                nextCol = nextCols[e]
                 if(e==0){
-                  let g = ++e
-                  rightCol = mainCols[g].textContent
+                  rightCol = mainCols[++e]
                   sumCols = nextCol + prevCol + rightCol
-                }else if(0 < e < 25){ //$a*$b
-                  let f = --e
-                  let g = ++e
-                  leftCol = mainCols[f].textContent
-                  rightCol = mainCols[g].textContent
+                }else if(0 < e < 25){ //?подставить $a*$b
+                  leftCol = mainCols[--e]
+                  rightCol = mainCols[++e]
                   sumCols = nextCol + prevCol + rightCol + leftCol
                 }else{
-                  let f = --e
-                  leftCol = mainCols[f].textContent
+                  leftCol = mainCols[--e]
                   sumCols = nextCol + prevCol + leftCol
                 }
                 if(sumCols >= 2) sum++
               }else{
-                prevCol = prevCols[e].textContent
+                prevCol = prevCols[e]
                 if(e==0){
-                  let g = ++e
-                  rightCol = mainCols[g].textContent
+                  rightCol = mainCols[++e]
                   sumCols = prevCol + rightCol
-                }else if(0 < e < 25){ //$a*$b
-                  let f = --e
-                  let g = ++e
-                  leftCol = mainCols[f].textContent
-                  rightCol = mainCols[g].textContent
+                }else if(0 < e < 25){ //?подставить $a*$b
+                  leftCol = mainCols[--e]
+                  rightCol = mainCols[++e]
                   sumCols = prevCol + rightCol + leftCol
                 }else{
-                  let f = --e
-                  leftCol = mainCols[f].textContent
+                  leftCol = mainCols[--e]
                   sumCols = prevCol + leftCol
                 }
                 if(sumCols >= 2) sum++
